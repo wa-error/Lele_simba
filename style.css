@@ -1,0 +1,143 @@
+/* خلفيات */
+body {
+  margin: 0; padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('background-desktop.png') no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+}
+@media (max-width: 768px) {
+  body {
+    background: url('background-mobile.png') no-repeat center center fixed;
+    background-size: cover;
+  }
+}
+/* الحاوية */
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  background: rgba(20,20,20,0.8);
+  padding: 25px 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255,255,255,0.15);
+}
+h1 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: 900;
+  font-size: 2.8rem;
+  color: #ffd700;
+  text-shadow: 1px 1px 3px #b8860b;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+th, td {
+  border: 1px solid #444;
+  padding: 10px;
+  text-align: center;
+}
+th {
+  background: #222;
+  color: #ffd700;
+  font-weight: bold;
+}
+td.status {
+  font-weight: 700;
+}
+td.status.active {
+  color: #4caf50;
+}
+td.status.late {
+  color: #f44336;
+}
+button.confirm-btn {
+  background: #ffd700;
+  border: none;
+  color: #000;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+button.confirm-btn:hover {
+  background: #e6c200;
+}
+button.edit-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: #f44336;
+  cursor: pointer;
+}
+button.edit-btn:disabled {
+  cursor: not-allowed;
+  color: #999;
+}
+.img-upload {
+  margin-top: 10px;
+}
+input[type="file"] {
+  color: #fff;
+}
+.penalty-list {
+  background: #111;
+  border-radius: 12px;
+  padding: 15px 20px;
+  max-height: 180px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  border: 1px solid #444;
+}
+.penalty-list h3 {
+  color: #ffd700;
+  margin-bottom: 10px;
+}
+.penalty-item {
+  padding: 6px 8px;
+  border-bottom: 1px solid #333;
+  color: #ddd;
+}
+.laws {
+  background: #222;
+  border-radius: 12px;
+  padding: 15px 20px;
+  font-size: 0.9rem;
+  color: #eee;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+.laws h3 {
+  color: #ffd700;
+  margin-bottom: 10px;
+}
+.footer-note {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #bbb;
+  margin-top: 15px;
+}
+.footer-note small {
+  display: block;
+  border-top: 1px solid #444;
+  padding-top: 6px;
+  margin-top: 10px;
+}
+.info-text {
+  text-align: center;
+  font-size: 1rem;
+  background: #222;
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  color: #fff9c4;
+  border: 1px solid #ffd700;
+}
+.status-text {
+  font-weight: 700;
+}

@@ -10,7 +10,6 @@ body {
   body {
     background: url('background-mobile.png') no-repeat center center fixed;
     background-size: contain; /* تعديل هنا */
-    background-position: center top; /* تعديل هنا */
     background-attachment: scroll; /* تعديل هنا */
   }
 }

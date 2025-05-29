@@ -8,8 +8,10 @@ body {
 }
 @media (max-width: 768px) {
   body {
-    background: url('background-mobile.png') no-repeat center center fixed;
-    background-size: contain; /* تعديل هنا */
+    background: url('background-mobile.png') no-repeat center center scroll;
+    background-repeat: no-repeat; /* تعديل هنا */
+    background-size: cover; /* تعديل هنا */
+    background-position: center; /* تعديل هنا */
     background-attachment: scroll; /* تعديل هنا */
   }
 }

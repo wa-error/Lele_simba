@@ -7,12 +7,8 @@ const schedule = [
 ];
 
 
-
-
 // العقوبة الأسبوعية
 const weeklyPenalty = "اللعب مع ليلي وسيمبا لمدة نصف ساعة أو شراء ألعاب أو أكل أو رمل لليلي وسيمبا لا يقل سعرها عن 100 ريال";
-
-
 
 
 // إعداد localStorage keys
@@ -20,13 +16,9 @@ const LS_CONFIRMATIONS_KEY = 'confirmations';
 const LS_PENALTIES_KEY = 'penalties';
 
 
-
-
 // تحميل البيانات من localStorage أو إنشاء جديد
 let confirmations = JSON.parse(localStorage.getItem(LS_CONFIRMATIONS_KEY)) || {};
 let penalties = JSON.parse(localStorage.getItem(LS_PENALTIES_KEY)) || [];
-
-
 
 
 // تاريخ بداية الأسبوع (أول يوم الأحد الساعة 00:00) - توقيت السعودية UTC+3
@@ -35,8 +27,6 @@ function getRiyadhNow() {
   const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
   return new Date(utc + 3 * 3600000);
 }
-
-
 
 
 // بداية الأسبوع الأحد الساعة 00:00 بتوقيت الرياض
@@ -51,15 +41,11 @@ function getWeekStart() {
 }
 
 
-
-
 // تحويل رقم اليوم إلى اسم عربي
 function getDayName(dayNum) {
   const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
   return days[dayNum] || '';
 }
-
-
 
 
 // التحقق من فترة التمشيط (من 5 مساءً حتى 7:30 صباح اليوم التالي) بتوقيت الرياض
@@ -74,15 +60,11 @@ function isInBrushingTime() {
 }
 
 
-
-
 // حفظ البيانات في localStorage
 function saveData() {
   localStorage.setItem(LS_CONFIRMATIONS_KEY, JSON.stringify(confirmations));
   localStorage.setItem(LS_PENALTIES_KEY, JSON.stringify(penalties));
 }
-
-
 
 
 // إضافة عقوبة جديدة
@@ -95,8 +77,6 @@ function addPenalty(name, reason) {
     renderPenalties();
   }
 }
-
-
 
 
 // عرض سجل العقوبات
@@ -125,8 +105,6 @@ function renderPenalties() {
     penaltyList.appendChild(div);
   });
 }
-
-
 
 
 // تنفيذ العقوبة
@@ -159,8 +137,6 @@ function executePenalty(index) {
 }
 
 
-
-
 // عرض صور تنفيذ العقوبة
 function showPenaltyImages(index) {
   const penalty = penalties[index];
@@ -174,8 +150,6 @@ function showPenaltyImages(index) {
     imgWindow.document.write(`<img src="${src}" style="max-width:100%;display:block;margin:10px 0;">`);
   });
 }
-
-
 
 
 // تأكيد التمشيط مع رفع صورتين
@@ -228,8 +202,6 @@ function confirmBrushing(name, day) {
   };
   input1.click();
 }
-
-
 
 
 // توليد جدول التمشيط
@@ -318,8 +290,6 @@ function renderTable() {
     tbody.appendChild(tr);
   }
 }
-
-
 
 
 // تشغيل البرنامج

@@ -9,7 +9,8 @@ body {
 @media (max-width: 768px) {
   body {
     background: url('background-mobile.png') no-repeat center center fixed;
-    background-size: cover;
+    background-size: contain; /* تعديل هنا */
+    background-position: center top; /* تعديل هنا */
   }
 }
 /* الحاوية */

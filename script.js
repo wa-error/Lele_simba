@@ -72,7 +72,7 @@ function addPenalty(name, reason) {
   const now = new Date();
   const date = now.toLocaleDateString('ar-EG');
   if (!penalties.find(p => p.name === name && p.date === date)) {
-    penalties.push({ name, reason, date, executed: false });
+    penalties.push({ name, reason, date, executed: false, images: [] });
     saveData();
     renderPenalties();
   }
@@ -96,7 +96,10 @@ function renderPenalties() {
     if (!penalty.executed) {
       html += `<button onclick="executePenalty(${index})">تنفيذ العقاب</button>`;
     } else {
-      html += `تم التنفيذ ✅`;
+      html += `تم التنفيذ ✅ `;
+      if (penalty.images && penalty.images.length > 0) {
+        html += `<button onclick="showPenaltyImages(${index})">عرض الصور</button>`;
+      }
     }
     div.innerHTML = html;
     penaltyList.appendChild(div);
@@ -109,12 +112,43 @@ function executePenalty(index) {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'image/*';
+  input.multiple = true; // للسماح برفع أكثر من صورة لو حبيت
   input.onchange = () => {
-    penalties[index].executed = true;
-    saveData();
-    renderPenalties();
+    const files = input.files;
+    if (files.length === 0) return;
+    const imagesArr = [];
+    let loadedCount = 0;
+    for (let i = 0; i < files.length; i++) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        imagesArr.push(reader.result);
+        loadedCount++;
+        if (loadedCount === files.length) {
+          penalties[index].executed = true;
+          penalties[index].images = imagesArr;
+          saveData();
+          renderPenalties();
+        }
+      };
+      reader.readAsDataURL(files[i]);
+    }
   };
   input.click();
+}
+
+
+// عرض صور تنفيذ العقوبة
+function showPenaltyImages(index) {
+  const penalty = penalties[index];
+  if (!penalty || !penalty.images || penalty.images.length === 0) {
+    alert('لا توجد صور محفوظة.');
+    return;
+  }
+  const imgWindow = window.open('', '_blank');
+  imgWindow.document.write('<h2>صور تنفيذ العقوبة</h2>');
+  penalty.images.forEach(src => {
+    imgWindow.document.write(`<img src="${src}" style="max-width:100%;display:block;margin:10px 0;">`);
+  });
 }
 
 
@@ -126,9 +160,12 @@ function confirmBrushing(name, day) {
   }
 
 
-  const confirmKey = `${name}-${getWeekStart().toISOString().slice(0, 10)}`;
-  if (confirmations[confirmKey]) {
-    alert('لقد أكدت التمشيط لهذا الأسبوع مسبقاً.');
+  const weekKey = getWeekStart().toISOString().slice(0, 10);
+  const confirmKey = `${name}-${weekKey}-${day}`;
+
+
+  if (confirmations[confirmKey]?.confirmed) {
+    alert('لقد أكدت التمشيط لهذا اليوم مسبقاً.');
     return;
   }
 
@@ -141,12 +178,25 @@ function confirmBrushing(name, day) {
     input2.type = 'file';
     input2.accept = 'image/*';
     input2.onchange = () => {
-      confirmations[confirmKey] = true;
-      penalties = penalties.filter(p => p.name !== name);
-      saveData();
-      renderTable();
-      renderPenalties();
-      alert('تم تأكيد التمشيط بنجاح.');
+      const reader1 = new FileReader();
+      reader1.onload = () => {
+        const img1 = reader1.result;
+        const reader2 = new FileReader();
+        reader2.onload = () => {
+          const img2 = reader2.result;
+          confirmations[confirmKey] = {
+            confirmed: true,
+            images: [img1, img2]
+          };
+          penalties = penalties.filter(p => p.name !== name);
+          saveData();
+          renderTable();
+          renderPenalties();
+          alert('تم تأكيد التمشيط بنجاح.');
+        };
+        reader2.readAsDataURL(input2.files[0]);
+      };
+      reader1.readAsDataURL(input1.files[0]);
     };
     input2.click();
   };
@@ -164,16 +214,14 @@ function renderTable() {
     currentDay.setDate(weekStart.getDate() + i);
     const sched = schedule.find(s => s.day === i % schedule.length);
     const name = sched ? sched.name : '-';
-    const confirmKey = sched ? `${sched.name}-${weekStart.toISOString().slice(0, 10)}` : null;
-    const confirmed = confirmKey ? (confirmations[confirmKey] === true) : false;
+    const confirmKey = sched ? `${sched.name}-${weekStart.toISOString().slice(0, 10)}-${i}` : null;
+    const confirmed = confirmKey ? confirmations[confirmKey]?.confirmed : false;
     const today = getRiyadhNow();
     const currentDayStart = new Date(currentDay);
-currentDayStart.setHours(8, 0, 0, 0); // بداية اليوم 8 صباحًا بتوقيت الرياض
-
-const nextDayStart = new Date(currentDayStart);
-nextDayStart.setDate(nextDayStart.getDate() + 1); // بداية اليوم التالي 8 صباحًا
-
-const isToday = today >= currentDayStart && today < nextDayStart;
+    currentDayStart.setHours(8, 0, 0, 0);
+    const nextDayStart = new Date(currentDayStart);
+    nextDayStart.setDate(nextDayStart.getDate() + 1);
+    const isToday = today >= currentDayStart && today < nextDayStart;
 
 
     const tr = document.createElement('tr');
@@ -199,6 +247,18 @@ const isToday = today >= currentDayStart && today < nextDayStart;
       tdStatus.classList.add('active');
       const btn = document.createElement('button');
       btn.textContent = 'عرض الصور';
+      btn.onclick = () => {
+        const imgs = confirmations[confirmKey]?.images || [];
+        if (imgs.length === 0) {
+          alert('لا توجد صور محفوظة.');
+        } else {
+          const imgWindow = window.open('', '_blank');
+          imgWindow.document.write('<h2>صور التمشيط</h2>');
+          imgs.forEach(src => {
+            imgWindow.document.write(`<img src="${src}" style="max-width:100%;display:block;margin:10px 0;">`);
+          });
+        }
+      };
       tdConfirm.appendChild(btn);
     } else if (sched && isToday) {
       tdStatus.textContent = 'في الانتظار';
@@ -240,5 +300,3 @@ function init() {
 
 
 init();
-
-

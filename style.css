@@ -1,27 +1,22 @@
 /* خلفيات */
-body {
+html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #fff;
 }
 
 
-/* ✅ الخلفية الثابتة */
-.background {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: url('background-desktop.png') no-repeat center center;
+body {
+  background: url('background-desktop.png') no-repeat center center fixed;
   background-size: cover;
-  z-index: -1;
 }
 
 
 @media (max-width: 768px) {
-  .background {
-    background: url('background-mobile.png') no-repeat center center;
+  body {
+    background: url('background-mobile.png') no-repeat center center fixed;
     background-size: cover;
   }
 }

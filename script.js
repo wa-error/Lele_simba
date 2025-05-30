@@ -170,13 +170,11 @@ function confirmBrushing(name, day) {
   const input1 = document.createElement('input');
   input1.type = 'file';
   input1.accept = 'image/*';
-  input1.capture = 'environment';
 
   input1.onchange = () => {
     const input2 = document.createElement('input');
     input2.type = 'file';
     input2.accept = 'image/*';
-    input2.capture = 'environment';
 
     input2.onchange = () => {
       const file1 = input1.files[0];

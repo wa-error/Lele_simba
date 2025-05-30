@@ -8,20 +8,15 @@
 </head>
 <body>
 
-
   <!-- ✅ الخلفية الثابتة -->
   <div class="background"></div>
-
 
   <div class="container">
     <h1>جدول تمشيط ليلي وسيمبا</h1>
 
-
     <div class="info-text">
-      هذه فقط نسخة تجريبية من موقع تمشيط ليلي وسيمبا وستكون لهذا الأسبوع فقط للتأكد وفحصه من الأخطاء.
-      النسخة الأصلية ستكون أجمل بكثير وسيبدأ استخدامها بعد عيد الأضحى إن شاء الله.
+      هذه النسخه الاولى من موقع تمشيط ليلي وسيمبا  فقط لأخذ اقتراحاتكم ورأيكم وسيتم بدء العمل بها من الاسبوع القادم ومع الوقت ستتطور وتصبح اجمل ان شاء الله 
     </div>
-
 
     <table id="schedule-table">
       <thead>
@@ -37,7 +32,14 @@
       </tbody>
     </table>
 
+    <!-- ✅ قسم رفع الصور -->
+    <div class="upload-section">
+      <h3>رفع صور التمشيط</h3>
+      <input type="file" id="uploadInput" accept="image/*">
+      <button id="confirmBtn" disabled>تأكيد التمشيط</button>
+    </div>
 
+    <!-- ✅ القوانين -->
     <div class="laws">
       <h3>قوانين التمشيط</h3>
       <ol>
@@ -51,20 +53,65 @@
       </ol>
     </div>
 
-
+    <!-- ✅ سجل العقوبات -->
     <div class="penalty-list" id="penalty-list">
       <h3>سجل العقوبات</h3>
       <!-- قائمة العقوبات تظهر هنا -->
     </div>
 
-
+    <!-- ✅ الملاحظة الأخيرة -->
     <div class="footer-note">
       <div>بـــهذا الجدول، نساهم جميعًا في الحفاظ على جمال وصحة ليلي وسيمبا، ونعبر عن حبنا لهما كجزء مهم من العائلة.</div>
       <small>جميع الحقوق محفوظة لليلي وسيمبا © 2025</small>
     </div>
   </div>
 
+  <!-- ✅ سكربت الصور -->
+  <script>
+    const fileInput = document.getElementById("uploadInput");
+    const confirmBtn = document.getElementById("confirmBtn");
+    let uploadedImages = [];
 
+    fileInput.addEventListener("change", function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        uploadedImages.push(event.target.result);
+
+        if (uploadedImages.length === 1) {
+          alert("📸 تم رفع الصورة الأولى. الرجاء رفع الصورة الثانية.");
+          fileInput.value = "";
+        }
+
+        if (uploadedImages.length === 2) {
+          alert("✅ تم رفع الصورتين! يمكنك الآن تأكيد التمشيط.");
+          confirmBtn.disabled = false;
+          fileInput.disabled = true;
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+
+    confirmBtn.addEventListener("click", function () {
+      if (uploadedImages.length !== 2) {
+        alert("❗ يجب رفع صورتين لتأكيد التمشيط.");
+        return;
+      }
+
+      alert("✅ تم تأكيد التمشيط بنجاح!");
+      console.log("الصور:", uploadedImages);
+
+      // إعادة التهيئة
+      uploadedImages = [];
+      confirmBtn.disabled = true;
+      fileInput.disabled = false;
+      fileInput.value = "";
+    });
+  </script>
+
+  <!-- لو عندك script.js مستقل خله بعد هذا -->
   <script src="script.js"></script>
 </body>
 </html>

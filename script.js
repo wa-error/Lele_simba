@@ -159,47 +159,67 @@ function confirmBrushing(name, day) {
     return;
   }
 
-
   const weekKey = getWeekStart().toISOString().slice(0, 10);
   const confirmKey = `${name}-${weekKey}-${day}`;
-
 
   if (confirmations[confirmKey]?.confirmed) {
     alert('لقد أكدت التمشيط لهذا اليوم مسبقاً.');
     return;
   }
 
-
   const input1 = document.createElement('input');
   input1.type = 'file';
   input1.accept = 'image/*';
+  input1.capture = 'environment';
+
   input1.onchange = () => {
     const input2 = document.createElement('input');
     input2.type = 'file';
     input2.accept = 'image/*';
+    input2.capture = 'environment';
+
     input2.onchange = () => {
+      const file1 = input1.files[0];
+      const file2 = input2.files[0];
+
+      if (!file1 || !file2) {
+        alert('يرجى اختيار صورتين.');
+        return;
+      }
+
       const reader1 = new FileReader();
-      reader1.onload = () => {
-        const img1 = reader1.result;
-        const reader2 = new FileReader();
-        reader2.onload = () => {
-          const img2 = reader2.result;
-          confirmations[confirmKey] = {
-            confirmed: true,
-            images: [img1, img2]
-          };
-          penalties = penalties.filter(p => p.name !== name);
-          saveData();
-          renderTable();
-          renderPenalties();
-          alert('تم تأكيد التمشيط بنجاح.');
-        };
-        reader2.readAsDataURL(input2.files[0]);
+      const reader2 = new FileReader();
+      let img1 = null, img2 = null;
+
+      reader1.onloadend = () => {
+        img1 = reader1.result;
+        if (img2 !== null) saveConfirmation();
       };
-      reader1.readAsDataURL(input1.files[0]);
+
+      reader2.onloadend = () => {
+        img2 = reader2.result;
+        if (img1 !== null) saveConfirmation();
+      };
+
+      reader1.readAsDataURL(file1);
+      reader2.readAsDataURL(file2);
+
+      function saveConfirmation() {
+        confirmations[confirmKey] = {
+          confirmed: true,
+          images: [img1, img2]
+        };
+        penalties = penalties.filter(p => p.name !== name);
+        saveData();
+        renderTable();
+        renderPenalties();
+        alert('تم تأكيد التمشيط بنجاح.');
+      }
     };
+
     input2.click();
   };
+
   input1.click();
 }
 

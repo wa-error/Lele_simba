@@ -230,7 +230,7 @@ function renderTable() {
   for (let i = 0; i < 7; i++) {
     const currentDay = new Date(weekStart);
     currentDay.setDate(weekStart.getDate() + i);
-    const sched = schedule.find(s => s.day === i % schedule.length);
+    const sched = schedule[i % schedule.length];
     const name = sched ? sched.name : '-';
     const confirmKey = sched ? `${sched.name}-${weekStart.toISOString().slice(0, 10)}-${i}` : null;
     const confirmed = confirmKey ? confirmations[confirmKey]?.confirmed : false;

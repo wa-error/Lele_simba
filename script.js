@@ -1,9 +1,9 @@
 // بيانات الأفراد والأيام (الأحد = 0)
 const schedule = [
-  { name: 'عزوز', day: 0 },
-  { name: 'مرام', day: 1 },
-  { name: 'سحر', day: 2 },
-  { name: 'بشاير', day: 3 },
+  { name: 'بشاير', day: 0 },
+  { name: 'عزوز', day: 1 },
+  { name: 'مرام', day: 2 },
+  { name: 'سحر', day: 3 },
 ];
 
 
